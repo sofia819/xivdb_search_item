@@ -1,26 +1,30 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import { fetchSearchResult } from "./xivdb_search_service";
+import { ResultList } from "./result_list";
+import { SearchForm } from "./search_form";
 
-function App() {
+export const App = () => {
+  const [keyword, setKeyword] = useState("");
+  const [searchResult, setSearchResult] = useState([]);
+
+  const onSearch = () => {
+    if (keyword) {
+      fetchSearchResult(keyword)
+        .then((response) => setSearchResult(response?.Results))
+        .then(() => setKeyword(""));
+    }
+  };
+
+  const onUpdateKeyword = (e) => setKeyword(e.target.value);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <SearchForm
+        keyword={keyword}
+        handleUpdateKeyword={onUpdateKeyword}
+        handleSearch={onSearch}
+      />
+      <ResultList results={searchResult} />
+    </>
   );
-}
-
-export default App;
+};
