@@ -6,7 +6,18 @@ export const fetchSearchResult = (keyword) =>
     .query({
       string: keyword,
       limit: 5,
-      indexes: "Item"
+      indexes: "Item",
+    })
+    .get()
+    .json();
+
+export const fetchMoreSearchResult = (keyword, page) =>
+  wretch(searchEndpoint)
+    .query({
+      string: keyword,
+      limit: 5,
+      indexes: "Item",
+      page,
     })
     .get()
     .json();
